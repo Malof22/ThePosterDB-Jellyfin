@@ -4,7 +4,7 @@
     "name": "PosterDB",
     "description": "Integrates ThePosterDB (theposterdb.com) as a remote image provider in Jellyfin. Requires a ThePosterDB account. Configure your email and password in the plugin settings page, then use \"Edit Images\" on any movie or series to browse posters.",
     "overview": "Adds ThePosterDB as an image source for movies, series and collections.",
-    "owner": "malofollain",
+    "owner": "Malof22",
     "category": "Metadata",
     "versions": []
   }
