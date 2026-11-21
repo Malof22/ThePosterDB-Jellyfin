@@ -46,7 +46,7 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Install JPRM
-        run: dotnet tool install -g jprm
+        run: pip install jprm
 
       - name: Publish
         run: |
@@ -57,6 +57,7 @@ jobs:
       - name: Package plugin
         run: |
           version="${GITHUB_REF_NAME#v}"
+          mkdir -p artifacts
           jprm plugin package --version "$version" --output ./artifacts ./dist
 
       - name: Create GitHub Release
@@ -68,7 +69,8 @@ jobs:
       - name: Update manifest.json
         run: |
           version="${GITHUB_REF_NAME#v}"
-          zip_url="https://github.com/${{ github.repository }}/releases/download/${GITHUB_REF_NAME}/posterdb_${version}.zip"
+          zip_name="posterdb_${version}.zip"
+          zip_url="https://github.com/${{ github.repository }}/releases/download/${GITHUB_REF_NAME}/${zip_name}"
           jprm repo add --plugin-url "$zip_url" manifest.json
 
       - name: Commit updated manifest
