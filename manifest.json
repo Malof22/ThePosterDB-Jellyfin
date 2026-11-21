@@ -6,6 +6,7 @@
     "overview": "Adds ThePosterDB as an image source for movies, series and collections.",
     "owner": "Malof22",
     "category": "Metadata",
+    "imageUrl": "https://raw.githubusercontent.com/Malof22/ThePosterDB-Jellyfin/main/assets/logo.png",
     "versions": [
       {
         "version": "1.0.0.0",
