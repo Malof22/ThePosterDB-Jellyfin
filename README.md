@@ -22,7 +22,7 @@ A Jellyfin plugin that integrates [ThePosterDB](https://theposterdb.com) as a re
 1. In Jellyfin, go to **Dashboard → Plugins → Repositories**
 2. Add a new repository with this URL:
    ```
-   https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/manifest.json
+   https://raw.githubusercontent.com/Malof22/ThePosterDB-Jellyfin/main/manifest.json
    ```
 3. Go to **Dashboard → Plugins → Catalog**, find **PosterDB** and install it
 4. Restart Jellyfin
