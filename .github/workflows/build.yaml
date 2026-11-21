@@ -18,18 +18,8 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      - name: Restore
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-
-      - name: Publish
-        run: |
-          dotnet publish Jellyfin.Plugin.PosterDB/Jellyfin.Plugin.PosterDB.csproj \
-            --configuration Release \
-            --no-build \
-            --output ./dist
+      - name: Restore & Build
+        run: dotnet build --configuration Release
 
   release:
     runs-on: ubuntu-latest
@@ -45,33 +35,88 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      - name: Install JPRM
-        run: pip install jprm
-
       - name: Publish
         run: |
           dotnet publish Jellyfin.Plugin.PosterDB/Jellyfin.Plugin.PosterDB.csproj \
             --configuration Release \
             --output ./dist
 
-      - name: Package plugin
+      - name: Package ZIP
+        id: package
         run: |
           version="${GITHUB_REF_NAME#v}"
+          timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          zip_name="posterdb_${version}.zip"
+
+          # Write meta.json (Jellyfin reads this from inside the ZIP)
+          cat > ./dist/meta.json <<EOF
+          {
+            "guid": "0d3b79db-1562-4b6d-a2f4-85be34f16e45",
+            "name": "PosterDB",
+            "overview": "Adds ThePosterDB as an image source for movies, series and collections.",
+            "description": "Integrates ThePosterDB as a remote image provider in Jellyfin. Requires a ThePosterDB account.",
+            "owner": "Malof22",
+            "category": "Metadata",
+            "version": "${version}",
+            "targetAbi": "12.0.0.0",
+            "timestamp": "${timestamp}",
+            "changelog": "See https://github.com/${{ github.repository }}/releases/tag/${GITHUB_REF_NAME}"
+          }
+          EOF
+
           mkdir -p artifacts
-          jprm plugin package --version "$version" --output ./artifacts ./dist
+          cd dist
+          zip -j "../artifacts/${zip_name}" \
+            Jellyfin.Plugin.PosterDB.dll \
+            AngleSharp.dll \
+            meta.json
+          cd ..
+
+          checksum=$(md5sum "artifacts/${zip_name}" | awk '{print $1}')
+          echo "zip_name=${zip_name}" >> "$GITHUB_OUTPUT"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "checksum=${checksum}" >> "$GITHUB_OUTPUT"
+          echo "timestamp=${timestamp}" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: artifacts/*.zip
+          files: artifacts/${{ steps.package.outputs.zip_name }}
           generate_release_notes: true
 
       - name: Update manifest.json
         run: |
-          version="${GITHUB_REF_NAME#v}"
-          zip_name="posterdb_${version}.zip"
-          zip_url="https://github.com/${{ github.repository }}/releases/download/${GITHUB_REF_NAME}/${zip_name}"
-          jprm repo add --plugin-url "$zip_url" manifest.json
+          version="${{ steps.package.outputs.version }}"
+          checksum="${{ steps.package.outputs.checksum }}"
+          timestamp="${{ steps.package.outputs.timestamp }}"
+          zip_name="${{ steps.package.outputs.zip_name }}"
+          source_url="https://github.com/${{ github.repository }}/releases/download/${GITHUB_REF_NAME}/${zip_name}"
+
+          python3 - <<PYEOF
+          import json, sys
+
+          with open("manifest.json") as f:
+              manifest = json.load(f)
+
+          new_version = {
+              "version": "${version}",
+              "changelog": "See https://github.com/${{ github.repository }}/releases/tag/${GITHUB_REF_NAME}",
+              "targetAbi": "12.0.0.0",
+              "sourceUrl": "${source_url}",
+              "checksum": "${checksum}",
+              "timestamp": "${timestamp}"
+          }
+
+          # Remove existing entry for this version if present, then prepend
+          manifest[0]["versions"] = [v for v in manifest[0].get("versions", []) if v["version"] != "${version}"]
+          manifest[0]["versions"].insert(0, new_version)
+
+          with open("manifest.json", "w") as f:
+              json.dump(manifest, f, indent=2)
+              f.write("\n")
+
+          print("manifest.json updated")
+          PYEOF
 
       - name: Commit updated manifest
         run: |
