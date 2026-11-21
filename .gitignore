@@ -1,0 +1,22 @@
+## Credentials
+.env
+
+## .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+dist/
+*.nupkg
+
+## Logs & debug artifacts
+log_*.log
+*.log
+
+## Dev tools
+test.sh
+PosterDB.TestCli/
+
+## Internal AI instructions
+Claude.md

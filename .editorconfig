@@ -1,0 +1,21 @@
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.{cs,csx}]
+indent_size = 4
+
+# Suppress StyleCop rules that conflict with Jellyfin conventions
+dotnet_diagnostic.SA1101.severity = none  # Don't require 'this.' prefix
+dotnet_diagnostic.SA1200.severity = none  # Allow usings outside namespace (file-scoped namespaces)
+dotnet_diagnostic.SA1309.severity = none  # Allow _camelCase private fields
+dotnet_diagnostic.SA1633.severity = none  # No file headers required
+
+[*.{json,yaml,yml,xml,html,js}]
+indent_size = 2

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>PosterDB</title>
+</head>
+<body>
+    <div id="PosterDBConfigPage"
+         data-role="page"
+         class="page type-interior pluginConfigurationPage"
+         data-require="emby-input,emby-button,emby-checkbox"
+         data-controller="__plugin/PosterDB.js">
+        <div data-role="content">
+            <div class="content-primary">
+                <form id="PosterDBConfigForm">
+                    <div class="sectionTitleContainer flex align-items-center">
+                        <h2 class="sectionTitle">ThePosterDB</h2>
+                    </div>
+                    <p>
+                        Enter your <a href="https://theposterdb.com" target="_blank" rel="noopener noreferrer">theposterdb.com</a>
+                        account credentials. Once saved, ThePosterDB will appear as an image source
+                        when you use <em>Edit Images</em> on any movie or series.
+                    </p>
+
+                    <div class="inputContainer">
+                        <input is="emby-input" id="Email" name="Email" type="email"
+                               label="Email / Username" autocomplete="username" />
+                        <div class="fieldDescription">Your ThePosterDB account email address.</div>
+                    </div>
+
+                    <div class="inputContainer">
+                        <input is="emby-input" id="Password" name="Password" type="password"
+                               label="Password" autocomplete="current-password" />
+                        <div class="fieldDescription">Your ThePosterDB account password.</div>
+                    </div>
+
+                    <div id="PosterDBStatus" class="fieldDescription" style="margin-bottom:1em;"></div>
+
+                    <div style="display:flex;gap:.5em;flex-wrap:wrap;">
+                        <button is="emby-button" type="submit" class="raised button-submit">
+                            <span>Save</span>
+                        </button>
+                        <button is="emby-button" type="button" id="TestConnectionBtn" class="raised">
+                            <span>Test Connection</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,18 @@
+---
+name: "PosterDB"
+guid: "0d3b79db-1562-4b6d-a2f4-85be34f16e45"
+version: "1.0.0.0"
+targetAbi: "12.0.0.0"
+framework: "net10.0"
+overview: "Adds ThePosterDB as an image source for movies, series and collections."
+description: >
+  Integrates ThePosterDB (theposterdb.com) as a remote image provider in Jellyfin.
+  Requires a ThePosterDB account. Configure your email and password in the plugin
+  settings page, then use "Edit Images" on any movie or series to browse posters.
+category: "Metadata"
+owner: "malo"
+artifacts:
+  - "Jellyfin.Plugin.PosterDB.dll"
+  - "AngleSharp.dll"
+changelog: |-
+  - Initial release for Jellyfin 12.0
