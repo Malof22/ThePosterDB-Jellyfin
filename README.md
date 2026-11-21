@@ -1,4 +1,8 @@
+<img src="assets/logo.png" alt="ThePosterDB" width="220" />
+
 # Jellyfin PosterDB Plugin
+
+> **Unofficial** — This plugin is not affiliated with, endorsed by, or officially connected to [ThePosterDB](https://theposterdb.com). All poster artwork belongs to their respective creators and is subject to ThePosterDB's terms of service.
 
 A Jellyfin plugin that integrates [ThePosterDB](https://theposterdb.com) as a remote image provider for movies, series and collections.
 
@@ -59,6 +63,10 @@ Tag a commit with `v1.x.x.x` to trigger the GitHub Actions release workflow. The
 1. Build and package the plugin as a ZIP
 2. Create a GitHub Release with the ZIP attached
 3. Update `manifest.json` with the new version and checksum
+
+## Disclaimer
+
+This is an **unofficial, community-made** plugin. It is not affiliated with or endorsed by ThePosterDB. Use it in accordance with [ThePosterDB's Terms of Service](https://theposterdb.com/terms). The logo displayed above belongs to ThePosterDB.
 
 ## License
 
